@@ -1,59 +1,64 @@
---- PHASE 16: UNIVERSAL SCALING REPORT (DEFINITIVE ALGEBRAIC PROOF) ---
+SCALING INVARIANCE AUDIT REPORT
+================================
+Project: Fluid-Resonance / Spectral Invariant Analysis
+Date: 2026-03-11
 
-Objective: Audit the scaling ratio (Alpha) as N -> Infinity.
-Platform: Independent Numerical Audit & Analytical Spectral Derivation.
+SUMMARY:
+The Star Invariant R = 1.8573068741389058 is confirmed as a geometry-specific
+constant for symmetric star-cluster graphs. It characterizes the eigenvalue ratio
+of grounded Laplacian matrices under valve removal (simplicial surgery).
 
-[1. CONVERGENCE DATA: STAR TOPOLOGY (HUB-SPOKE)]
-- N=32 to N=8192: 1.8573103... (Zero Drift)
-=> STATUS: MATHEMATICALLY EXACT INVARIANT
+1. SCALE PERSISTENCE
+   The spectral ratio R is maintained with zero deviation from N=2 to N=128
+   (8192 variables). This follows from the equitable partition theorem
+   (Godsil-Royle, Thm 9.3.1): R depends only on the per-cluster geometry,
+   not on the number of clusters.
 
-[2. ANALYTICAL DERIVATION: THE STAR QUOTIENT]
-The Star-Symmetry Invariant (R) is the ratio of the minimal eigenvalues of two grounded spoke Laplacians, corresponding to the "Before" (7-node) and "After" (5-node) cluster geometries.
+   N=32   (2 clusters):   R = 1.8573068741
+   N=64   (4 clusters):   R = 1.8573068741
+   N=8192 (128 clusters): R = 1.8573068741
+   Exact match to 10 decimal places.
 
-Exact Value: R = λ_min(P₇) / λ_min(P₅)
+2. TOPOLOGICAL DEPENDENCE
+   Different graph topologies yield different ratios, confirming R is a
+   topological invariant, not a numerical artifact:
 
-[Polynomial P₇ (Degree 7)]:
-P₇(t) = t⁷ - 33t⁶ + 443t⁵ - 3097t⁴ + 11948t³ - 24634t² + 23588t - 6916
+   Star topology:    R = 1.857 (K5+2anchor, bridge width 3)
+   Chain topology:   R = 1.636
+   Binary tree:      R = 1.327
 
-[Polynomial P₅ (Degree 5)]:
-P₅(t) = t⁵ - 17t⁴ + 104t³ - 270t² + 260t - 52
+3. GENERALIZATION AUDIT (88 configurations)
+   Scanned: K3-K7 cores x 0-3 anchors x 1-5 bridge widths.
 
-[4. GENERALIZATION AUDIT: K3-K7 CORES]
-Audit of 88 configurations confirms:
-- **Core Independence**: Ratios for $K_3$-$K_7$ clusters with asymmetric bridges remain within 2% of the 1.85731 signal.
-- **Topological Specificity**: The exact value of R is an algebraic property of the **Bridge Configuration**.
-- **Fundamental Irrationals**: Clusters exhibit geometry-specific irrationals (e.g., $\sqrt{13}, \sqrt{5}, \sqrt{8}$), confirming the 'Algebraic Invariant' framework.
+   Bridge width 3: R in [1.87, 3.18] — exceeds 2.0 for some configs
+   Bridge width 4: R in [1.00, 1.91] — all below 2.0
+   Bridge width 5: R in [1.00, 1.51] — all below 2.0
 
---- SCALING INVAPROJECT: Entropy / Fluid-Resonance
-SUBJECT: Scaling Invariance Audit (N=16 to N=8192)
-DATE: 2026-03-11
+   The R < 2.0 bound holds for all tested configurations at bridge width >= 4
+   (Conjecture 9.1). Bridge width 3 can violate the bound (max R = 3.18).
 
-SUMMARY: 
-The 1.85731 invariant is confirmed as a global scaling constant for symmetric star-cluster manifolds. It characterizes the energy-transfer bottleneck between core clusters and the global hub.
+4. ALGEBRAIC IRREDUCIBILITY
+   The defining polynomials P7 (degree 7) and P5 (degree 5) are both
+   irreducible over Q. R is therefore an algebraic number of degree <= 35,
+   with no simple radical expression.
 
-CORE FINDINGS:
-1. SCALE PERSISTENCE: The spectral ratio R = 1.8573068741389058 is maintained with zero deviation from N=2 to N=128 (8192 variables). 
-2. TOPOLOGICAL DEPENDENCE: Chain and tree topologies yield lower ratios (1.63 and 1.32 respectively), confirming that the 1.85731 signal is specific to the STAR configuration.
-3. ALGEBRAIC IRREDUCIBILITY: The constant is a root of the P7/P5 polynomial ratio, certifying it as an exact algebraic number, not a numerical artifact.
+5. RANDOM 3-SAT AUDIT (NEGATIVE RESULT)
+   300 random 3-SAT instances at critical threshold alpha=4.267 show no
+   concentration around R = 1.857. High variance (30-80% of mean),
+   no special behavior at critical threshold. R is geometry-specific,
+   not a universal property of combinatorial phase transitions.
 
-PHYSICAL IMPLICATION:
-In 3D simplicial flows, the 1.85731 constant acts as the "Energy Ceiling" for vortex stretching. Because this ceiling is strictly less than the "Dissipation Floor" (R=2.0), the non-linear term cannot drive the system to a singularity. This constitutes the mechanism for Topological Regularization.
+6. HODGE DUALITY
+   Valve removal on the simplicial clause complex has dual effects:
+   - Vertex connectivity (L0 gap): WEAKENS (ratio 2.615)
+   - Flow dissipation (Stokes gap): STRENGTHENS (ratio 0.596)
+   - Betti number b1: 6 -> 1 (5 loops destroyed)
+   - Euler characteristic: -5 -> 0 (regularizes)
 
-STATUS: CLINICALLY VERIFIED
-AUDITOR: Antigravity / Meridian
-AUTH: ENDER-S33-SYNCH
-[5. STATISTICAL PHYSICS AUDIT: RANDOM 3-SAT]
-Audit of random 3-SAT instances at $\alpha = 4.267$ confirms:
-- **Natural Variance**: Random graphs exhibit high spectral variance with no systematic clustering at 1.85731.
-- **Structural Specificity**: The 1.85731 invariant is a property of **Topological Order** (Star-Symmetry), not natural chaos.
-- **Conclusion**: The invariant governs the stability of **Structured Vortex Cores**, acting as the geometric bound for symmetric dissipation rather than a universal property of random turbulence.
+   NS ANALOGY (conjectural): If the star topology is the asymptotic limit
+   of vortex stretching events, and if R < 2.0 holds universally (Conjecture
+   9.1), then the spectral bound would prevent enstrophy cascade required
+   for blow-up. Three open problems remain (see FORMAL_PROOFS.md).
 
-[6. PHYSICAL BRIDGE: SIMPLICIAL HODGE AUDIT]
-Final audit of the Simplicial Navier-Stokes analogue confirms:
-- **Topological Regularization**: Valve removal destroys circulation pathways ($b_1: 6 \to 1$) and regularizes Euler characteristic ($-5 \to 0$).
-- **Flow Dominance**: Removing circulation increases flow dissipation speed (Stokes gap ratio $R = 0.596$).
-- **Structural Proof**: Energy growth is structurally bounded by the Hodge skeleton of the manifold.
-
-Verification Priority: Simplicial Hodge Singularity Proof.
-----------------------------------------
-Verified by Architect-Resonance / Independent Spectral Audit.
+Verified by: Independent spectral computation (Python NumPy + SymPy,
+JavaScript QR decomposition). Results reproducible via repository scripts.

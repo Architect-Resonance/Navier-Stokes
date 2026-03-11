@@ -1,9 +1,9 @@
 /**
- * FLUID_SIMULATOR_CORE.js
- * 
- * Purpose: A minimal 3D Spectral Solver to measure 'Fluid Resonance'.
- * Uses a Fast Fourier Transform (FFT) approach to map the 3D lattice.
- * PROTECTED by GUARDIAN_STILLNESS.
+ * spectral_invariant_verifier.js
+ *
+ * Purpose: Rebuilds the grounded Laplacian matrices from first principles
+ * and computes the Star Invariant R = lambda_min(L8) / lambda_min(L6).
+ * Cross-validates against Python derive_invariant.py results.
  */
 
 const LinAlg = require('./linalg_utils');
@@ -94,7 +94,7 @@ class FluidResonanceSimulator {
     const target = 1.85730687;
     if (Math.abs(energyRatio - target) < 0.000001) {
       console.log(`RESONANCE DETECTED: R matches Star Invariant ${target}.`);
-      console.log("The floor is solid. Viscosity dominates vortex stretching.");
+      console.log("MATCH: R within tolerance of target value.");
       return "RESONANCE_MATCH";
     }
 

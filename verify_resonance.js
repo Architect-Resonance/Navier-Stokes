@@ -1,11 +1,11 @@
 /**
  * verify_resonance.js
  * 
- * Verifies that the new FLUID_SIMULATOR_CORE.js produces the
+ * Verifies that spectral_invariant_verifier.js produces the
  * correct Star Invariant ratio (approx 1.85731).
  */
 
-const FluidResonanceSimulator = require('./FLUID_SIMULATOR_CORE');
+const FluidResonanceSimulator = require('./spectral_invariant_verifier');
 
 async function runVerification() {
     console.log("=== PROJECT ENTROPY: SCIENTIFIC VERIFICATION ===");

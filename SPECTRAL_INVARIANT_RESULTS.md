@@ -24,7 +24,7 @@ Where:
 - **Topology-dependent**: Chain -> 1.636, Binary tree -> 1.327 (different limits)
 - **Symmetry-required**: Asymmetric clusters scatter to [1.13, 2.12]
 - **Best rational approximation**: 13/7 (within 0.009%)
-- **Base irrational**: sqrt(17), from eigenvalue pair t^2 - 7t + 8 = 0
+- **Algebraic degree**: R is degree <= 35 (ratio of irreducible degree 7 and degree 5 algebraic numbers); no simple radical expression
 
 ### Characteristic Polynomials (irreducible over Q)
 
@@ -87,13 +87,13 @@ Scanned: K3-K7 cores x 0-3 anchors x 1-5 bridge widths.
 
 ### Base Irrationals by Cluster Geometry
 
-| Cluster | Irrational |
-|---------|-----------|
-| K3 + 2 anchors | sqrt(13) |
-| K5 + 2 anchors | sqrt(5)  |
-| K6 + 2 anchors | sqrt(8)  |
-| K7 + 2 anchors | sqrt(13) |
-| K_n + 0 anchors | All integer eigenvalues |
+| Cluster | Irrational | Note |
+|---------|-----------|------|
+| K3 + 2 anchors | sqrt(13) | Polynomial factors into quadratic with sqrt(13) |
+| K5 + 2 anchors | N/A | P7 and P5 are irreducible over Q (Theorems 3.1-3.2); eigenvalues are degree 7 and 5 algebraic numbers with no simple radical expression |
+| K6 + 2 anchors | sqrt(8) | Polynomial factors into quadratic with sqrt(8) |
+| K7 + 2 anchors | sqrt(13) | Polynomial factors into quadratic with sqrt(13) |
+| K_n + 0 anchors | All integer | Characteristic polynomials split completely over Z |
 
 ---
 
