@@ -72,7 +72,7 @@ class FluidResonanceSimulator {
     const { L8_grounded, L6_grounded } = this.buildInvariantMatrices();
     
     // Guardian Stability Check (New Spectral Guardian)
-    const stability = Guardian.checkStability(L8_grounded);
+    const stability = Guardian.checkStability(L8_grounded, L6_grounded);
     if (stability === "SHIELD_ACTIVATED") {
         throw new Error("Guardian: EMERGENCY HALT. Spectral Singularity detected.");
     }

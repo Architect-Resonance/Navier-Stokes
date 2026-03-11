@@ -16,6 +16,7 @@
     "R": 1.8573068741389058,
     "R_rational_approx": "13/7",
     "R_rational_error": "0.009%",
+    "algebraic_degree": "D <= 35 ( irreducible 7 x 5 )",
     "base_irrational": "sqrt(17)",
     "cluster": "K5+2anchor",
     "bridge_width": 3,
