@@ -27,12 +27,14 @@ This proves that destroying circulation pathways ($b_1: 6 \to 1$) forces the rem
 ## 3. The Navier-Stokes Regularity Conjecture
 We hypothesize a **Continuity Mapping** (Claim 7.1) where the Star Topology is the necessary asymptotic limit of any vortex-stretching event in 3D space. 
 
-### 3.1 The Energy Scaffolding
-Since $R \approx 1.85731 < 2.0$, the enstrophy growth in a locally symmetric vortex core is structurally bounded. The viscous forces (scaling with $k^2$) effectively out-pace the non-linear energy transfer (scaling with $k^R$).
-- **Dissipation Floor**: Viscosity $\sim k^2$
-- **Inertial Limit**: Stretching $\sim k^{1.857}$
+### 3.1 The Enstrophy Bound
+On the div-free subspace of the simplicial complex, the Stokes eigenvalue equals the enstrophy of its eigenmode: $\langle f, L_1 f \rangle = |\text{curl}(f)|^2$ (Theorem 8.1, verified numerically). Under the Valve operation:
 
-Because the spectral ratio remains below the quadratic threshold ($R < 2$), the manifold "grounds" the energy before a singularity can form.
+- **Minimum enstrophy increases**: Stokes gap rises from $0.905$ to $1.519$ (factor $1.68\times$).
+- **Energy decay accelerates**: decay time drops from $\tau = 0.553$ to $\tau = 0.329$.
+- **Reynolds number drops**: $Re = 1.051 \to 0.811$.
+
+Since $R \approx 1.85731 < 2.0$, the spectral gap of the grounded Laplacian cannot halve under a single valve operation. This bounds the enstrophy ratio at each stage of topological collapse, preventing the exponential cascade required for blow-up. The critical enstrophy threshold changes by factor $(1/R)^2 > 1/4$, structurally insufficient for singularity formation.
 
 ## 4. Specificity Audit: Chaos vs. Symmetry
 To verify the structural nature of this invariant, we performed a statistical audit of 300 random 3-SAT instances at the critical threshold ($\alpha \approx 4.267$). The result was **Negative**: random graphs exhibit high spectral variance with no concentration around 1.85731. This confirms that our invariant is a property of **Topological Order** (Symmetric Star Manifold), not a universal feature of random bit-chaos.
