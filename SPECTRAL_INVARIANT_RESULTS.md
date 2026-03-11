@@ -178,7 +178,59 @@ The **Stokes operator ratio is inverted** (< 1). Removing valve variables increa
 
 ---
 
-## 5. Publishable Conclusions
+## 5. Path 3 Phases B-C: Discrete NS + Energy Inequality
+
+**Scripts:** `path3_phase_b.py`, `path3_phase_c.py`
+
+### Discrete Flow Analysis (Phase B)
+
+The Fiedler flow (slowest-decaying div-free mode) lives on the hub cluster's K5 core.
+
+**Identity confirmed:** On div-free modes, Stokes eigenvalue = enstrophy of eigenmode.
+(`<f, L1 f> = |curl(f)|^2` when `B1 f = 0`)
+
+| Quantity | Full | Reduced | Effect |
+|---|---|---|---|
+| Div-free modes | 25 | 9 | -16 modes |
+| Harmonic modes (b1) | 6 | 1 | -5 loops destroyed |
+| Stokes gap | 0.9047 | 1.5188 | INCREASES |
+| Reynolds number | 1.051 | 0.811 | DROPS |
+| Energy decay time | 0.553 | 0.329 | 1.68x FASTER |
+| Ladyzhenskaya C | 0.582 | 0.549 | Slightly smaller |
+| Critical Re | 3.260 | 2.184 | Lower threshold |
+
+### Hodge Decomposition Theorem (Confirmed)
+
+```
+L1 spectrum = (L0 non-zero eigenvalues) UNION (L2 eigenvalues) UNION (b1 zeros)
+```
+
+Verified numerically: the 34 non-zero L1 eigenvalues are exactly the union of 15 L0 non-zero eigenvalues and 19 L2 eigenvalues. This is the discrete Hodge theorem.
+
+### R = 1.857 in the Hodge Spectrum
+
+19 eigenvalue pairs across L0/L1/L2/Stokes with ratio within 0.01 of 1.857:
+- **L0 internal:** 7.627 / 4.105 = 1.858
+- **L1 internal:** 1.748 / 0.940 = 1.859, 4.521 / 2.437 = 1.855, 8.394 / 4.521 = 1.857
+- **L2 internal:** 1.748 / 0.940 = 1.859
+- **Cross-spectrum:** 9.297 / 5.000 = 1.859 (L0_full / L0_red)
+
+R ~ 1.857 appears as an internal spectral ratio within L0, L1, and L2, but NOT as the gap ratio.
+
+### Valve = Topological Regularization
+
+| Level | Ratio (full/red) | Direction |
+|---|---|---|
+| Vertex connectivity (L0 gap) | 2.615 | WEAKENS |
+| Flow dissipation (Stokes gap) | 0.596 | STRENGTHENS |
+| Topology (b1) | 6 → 1 | SIMPLIFIES |
+| Euler characteristic | -5 → 0 | REGULARIZES |
+
+**NS analogy:** Valve removal destroys circulation modes, increases minimum enstrophy, reduces effective Reynolds number. The complex becomes "more laminar."
+
+---
+
+## 6. Publishable Conclusions
 
 ### What IS established:
 - R = 1.8573... is an exact, scale-invariant constant of star-cluster graph families
@@ -186,11 +238,19 @@ The **Stokes operator ratio is inverted** (< 1). Removing valve variables increa
 - It requires symmetric K5-type clusters and specific bridge geometry
 - Both defining polynomials are irreducible over Q
 - The invariant is topology-dependent (star vs chain vs tree give different limits)
+- The Hodge-1 spectrum of the clause complex satisfies L1 = L0_nz UNION L2 (discrete Hodge theorem)
+- R ~ 1.857 appears as internal spectral ratios within L0, L1, and L2
+- Valve removal has DUAL effect: weakens vertex connectivity but strengthens flow dissipation
+- Valve operation is a topological regularization: b1 drops, Euler char regularizes, Re drops
 
 ### What is NOT established:
-- Connection to 3-SAT phase transition at alpha = 4.267
+- Connection to 3-SAT phase transition at alpha = 4.267 (Path 2: negative result)
 - Universal scaling constant across random SAT instances
-- Bridge to Navier-Stokes regularity
+- Direct quantitative bridge to Navier-Stokes regularity (Path 3: qualitative only)
+- R does NOT appear as a Hodge gap ratio (only as internal eigenvalue pairs)
 
 ### Recommended paper focus:
-**Pure spectral graph theory** — a new family of exact algebraic invariants for clustered star graphs, defined by grounded Laplacian eigenvalue ratios. The invariant classifies star topologies and depends on cluster geometry and bridge structure.
+**Pure spectral graph theory** (Path 1) with a **Hodge-theoretic extension** (Path 3):
+1. A new family of exact algebraic invariants for clustered star graphs
+2. The valve operation as topological regularization (b1 reduction, Euler normalization)
+3. The duality between vertex connectivity and flow dissipation under simplicial surgery
