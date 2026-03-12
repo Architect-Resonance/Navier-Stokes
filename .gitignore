@@ -1,5 +1,6 @@
 # IDE / System
 .vscode/
+.idea/
 .claude/
 .expo/
 .ruff_cache/
@@ -7,6 +8,14 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.swp
+*.swo
+.pytest_cache/
+.mypy_cache/
+
+# OS
+.DS_Store
+Thumbs.db
 
 # Dependencies
 node_modules/
@@ -23,6 +32,10 @@ mockups/
 *.tmp
 temp/
 tmp/
+
+# Debug & output
+debug_*.js
+output.txt
 
 # Data / Large Files
 *.pdf
