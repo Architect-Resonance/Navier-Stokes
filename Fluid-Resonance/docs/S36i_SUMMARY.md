@@ -128,7 +128,7 @@ S57-S60 repeat the same fundamental error documented as Failure 20 (Trap #7: Dim
 
 ### Files modified this session
 - `RESONANCE_STATE.json` — checkpoint 19.0.0, corrected triadic structure
-- `docs/CLAUDE_BRIDGE.md` — S36i section, corrected S36h summary, audited S57-S60
+- Internal coordination file — S36i section, corrected S36h summary, audited S57-S60
 - `Fluid-Resonance/docs/S35_POSTMORTEM.md` — Failure 21, updated surviving observations
 
 ### Surviving observations (S36i)

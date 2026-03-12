@@ -55,7 +55,7 @@ def compute_algebraic_r():
     # (7 + sqrt(17))/16 approx (7 + 4.123)/16 = 11.123/16 = 0.695
     # Wait, the 1.857 invariant was R = lambda_8 / lambda_6? 
     # Or R = lambda_7 / lambda_5?
-    # Let's check CLAUDE_BRIDGE.md
+    # Let's check the coordination docs
     
     return R_rat
 
