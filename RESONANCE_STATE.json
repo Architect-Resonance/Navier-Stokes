@@ -1,0 +1,190 @@
+{
+  "checkpoint": "21.2.0",
+  "status_label": "S94_LERAY_WRITEUP_COMPLETE",
+  "timestamp": "2026-03-13T03:00:00Z",
+  "single_source_of_truth": true,
+
+  "team": {
+    "Meridian": "Claude Opus 4.6 — Rigorous Auditor",
+    "Wanderer": "Claude Opus 4.6 — Independent Researcher",
+    "Antigravity": "Gemini — Synthesis Agent",
+    "Architect": "Brendan — Vision, Design, Submission"
+  },
+
+  "invariant_properties": {
+    "R": {
+      "value": 1.8573068741389058,
+      "status": "PROVEN (Algebraic)",
+      "description": "Universal Resonance Constant. Ratio of lambda_min(L_8x8) / lambda_min(L_6x6). Unique to the star-cluster + 3-clause bridge topology.",
+      "rational_approx": "13/7 (0.009% error)",
+      "cluster": "K5+2anchor",
+      "bridge_width": 3,
+      "bridge_clauses": "asymmetric 3-clause"
+    },
+    "L1_identity": {
+      "expression": "L_1 = nI",
+      "status": "PROVEN (Graph Theory)",
+      "description": "Hodge 1-Laplacian Identity for Complete Graphs Kn. Establishes the dissipation floor for bridge-mediated flows."
+    }
+  },
+
+  "characteristic_polynomials": {
+    "P7_numerator": "t^7 - 33t^6 + 443t^5 - 3097t^4 + 11948t^3 - 24634t^2 + 23588t - 6916",
+    "P7_irreducible": true,
+    "P5_denominator": "t^5 - 17t^4 + 104t^3 - 270t^2 + 260t - 52",
+    "P5_irreducible": true
+  },
+
+  "integer_laplacians": {
+    "L_8x8": [
+      [ 7, -1, -1, -1, -1, -1,  0,  0],
+      [-1,  6, -1, -1, -1,  0,  0,  0],
+      [-1, -1,  6, -1, -1,  0, -1,  0],
+      [-1, -1, -1,  5, -1, -1,  0,  0],
+      [-1, -1, -1, -1,  6,  0, -1,  0],
+      [-1,  0,  0, -1,  0,  4, -1, -1],
+      [ 0,  0, -1,  0, -1, -1,  4, -1],
+      [ 0,  0,  0,  0,  0, -1, -1,  2]
+    ],
+    "L_6x6": [
+      [ 5, -1, -1, -1,  0,  0],
+      [-1,  4, -1,  0,  0,  0],
+      [-1, -1,  3, -1,  0,  0],
+      [-1,  0, -1,  4, -1, -1],
+      [ 0,  0,  0, -1,  2, -1],
+      [ 0,  0,  0, -1, -1,  2]
+    ]
+  },
+
+  "eigenvalues": {
+    "lambda_min_8x8": 0.4949988739119799,
+    "lambda_min_6x6": 0.2665143174799662,
+    "ratio_R": 1.8573068741389058
+  },
+
+  "observed_dynamics": {
+    "cross_helicity_barrier": {
+      "dominance": 0.98,
+      "efficiency_decay": "C_cross(N) decreases (0.4182 to 0.4069 across N=32 to N=64)",
+      "status": "OBSERVED (Numerical)"
+    },
+    "extreme_vorticity_gap": {
+      "result": "S_local approx 3 * D_local at >99th percentile",
+      "verdict": "REFUTED (Local Self-Regulation)",
+      "status": "OBSERVED (Numerical)"
+    },
+    "lamb_helicity_decomposition": {
+      "t0_snapshots": {
+        "TG_achiral": {"cross_sol": 1.0000, "same_sol": 0.0000},
+        "imbalanced_80_20": {"cross_sol": 0.4186, "same_sol": 0.5814},
+        "random": {"cross_sol": 0.5578, "same_sol": 0.4422}
+      },
+      "time_averaged_full_NS": {
+        "TG": {"cross_sol_avg": 0.581, "same_sol_avg": 0.419},
+        "imbalanced": {"cross_sol_avg": 0.475, "same_sol_avg": 0.525},
+        "random": {"cross_sol_avg": 0.525, "same_sol_avg": 0.475}
+      },
+      "time_averaged_BT_surgery": {
+        "TG": {"cross_sol_avg": 1.000, "same_sol_avg": 0.000},
+        "imbalanced": {"cross_sol_avg": 0.631, "same_sol_avg": 0.369},
+        "random": {"cross_sol_avg": 0.697, "same_sol_avg": 0.303}
+      },
+      "bt_surgery_effect": "BT surgery UNIVERSALLY increases cross-helical P_sol contribution (TG: 58%->100%, Imb: 48%->63%, Rnd: 53%->70%)",
+      "claim3_strong_form": "REFUTED for chiral/imbalanced flows under full NS (co-helical contributes 42-58%)",
+      "claim3_achiral": "EXACT at t=0 (machine epsilon). Drifts under full NS but stays 100% under BT surgery.",
+      "bound_chain_valid": true,
+      "helicity_bound_status": "CORRECT when normalizations are consistent (66x was normalization bug, not formula error)",
+      "data_files_verified": "lamb_helicity_results.json DELETED (orphan, no generating script). lamb_decomposition_results.json is the verified output.",
+      "status": "OBSERVED (Numerical, S92 — verified by Meridian 2, full audit complete)"
+    },
+    "energy_weighted_leray_suppression": {
+      "geometric_alpha_cross_avg": 0.398,
+      "energy_weighted_at_peak_Z": {
+        "TG": {"alpha_cross": 0.1725, "alpha_same": 0.5143},
+        "random": {"alpha_cross": 0.3374, "alpha_same": 0.5690},
+        "imbalanced": {"alpha_cross": 0.3381, "alpha_same": 0.5513}
+      },
+      "max_alpha_cross_all_times": 0.3883,
+      "antiparallel_energy_fraction": "0.16-0.35% (negligible)",
+      "verdict": "Energy weighting REDUCES alpha below geometric average. Near-antiparallel triads are energetically disfavored by the cascade. Geometric bound is CONSERVATIVE.",
+      "status": "OBSERVED (Numerical, S93 — Meridian 2)"
+    }
+  },
+
+  "theoretical_kernel": {
+    "framework": "Loop Space (Migdal)",
+    "beltrami_relation": "Beltrami flows in ker(N_C). Nonlinear decoupling limit, NOT eigenstates of loop Hamiltonian.",
+    "lyapunov_test": "F(t) = ||P_sol(omega x v)||^2 / ||omega x v||^2 is NOT monotone. Full NS: F increases. BT surgery: F decreases on average.",
+    "regulatory_constraint": "Helicity conservation (Waleffe 1992) constrains heterochiral coupling budget.",
+    "status": "FORMALIZED (Analytical, S88-S91)"
+  },
+
+  "paths_completed": {
+    "path1_generalization": {
+      "status": "COMPLETE",
+      "key_finding": "R is geometry-specific; bridge width 1-2 degenerate",
+      "result": "POSITIVE — exact algebraic invariant family established"
+    },
+    "path2_random_sat": {
+      "status": "COMPLETE",
+      "key_finding": "No special behavior at alpha=4.267 (critical threshold)",
+      "result": "NEGATIVE — no SAT connection"
+    },
+    "path3_hodge_navier_stokes": {
+      "status": "COMPLETE",
+      "key_finding": "Valve = topological regularization; dual vertex-weakening / flow-strengthening",
+      "result": "QUALITATIVE — analogy established, not quantitative bridge"
+    }
+  },
+
+  "hodge_analysis": {
+    "b1_full": 6,
+    "b1_reduced": 1,
+    "stokes_gap_full": 0.9047,
+    "stokes_gap_reduced": 1.5188
+  },
+
+  "formal_proofs": {
+    "document": "FORMAL_PROOFS.md",
+    "proven_theorems": [
+      "Thm 1.1: Equitable Partition Reduction",
+      "Thm 2.1: Grounded Laplacian as Schur Complement",
+      "Thm 3.1: Irreducibility of P_7 over Q",
+      "Thm 3.2: Irreducibility of P_5 over Q",
+      "Thm 4.1: Scale Invariance",
+      "Thm 5.1: Topology Dependence",
+      "Thm 8.1: Enstrophy-Eigenvalue Identity",
+      "Thm 8.2: Dual Effect of Valve Removal",
+      "Thm 8.3: Topological Regularization"
+    ]
+  },
+
+  "leray_suppression_formula": {
+    "exact_formula": "alpha_{+-}(theta, rho) = 1 - (1+rho)^2(1+cos theta) / [(1+rho^2+2rho cos theta)(3-cos theta)]",
+    "equal_magnitude": "alpha_{+-}(theta) = (1-cos theta)/(3-cos theta)",
+    "isotropic_average_rho1": "1 - ln(2) = 0.30685...",
+    "verification_max_error": "1.35e-16",
+    "properties": {
+      "parallel": "alpha = 0 (fully gradient)",
+      "perpendicular_rho1": "alpha = 1/3",
+      "antiparallel_rho1": "alpha -> 1/2",
+      "scale_inversion_symmetry": "alpha(theta, rho) = alpha(theta, 1/rho)",
+      "rho_minimum": "isotropic avg MINIMIZED at rho=1 (1-ln2=0.307), INCREASES to 2(1-ln2)=0.614 as rho->0 or inf",
+      "CORRECTION_S94": "property (d) 'alpha->0 as rho->0 or inf' is FALSE. Scale separation WEAKENS suppression."
+    },
+    "lamb_weighted_rho1": {
+      "solenoidal_lamb": "|P_sol(h+ x h-)|^2 = sin^2(theta)/4 for rho=1",
+      "lamb_weighted_alpha": "alpha_E = 1/4 = 0.25 (EXACT, stronger than 1-ln2, requires incoherent/random-phase)",
+      "vanishing_at_extremes": "F(theta) -> 0 at theta=0 AND theta=pi for ALL rho",
+      "status": "PROVED (Analytical, S94-W)"
+    },
+    "research_note": "Fluid-Resonance/docs/LERAY_SUPPRESSION_NOTE.md (14 sections, S88-S94)",
+    "status": "PROVEN (Analytical, S93-W; Lamb-weighted S94-W)"
+  },
+
+  "open_problems": {
+    "P1": "Phase coherence control — multiple triads at same k3 can constructively interfere, pushing effective alpha_E above per-triad bound. THIS is the regularity problem.",
+    "P2": "C-S exponent — alpha<1 reduces constant but not 3/2 exponent in enstrophy bound",
+    "P3": "Extension of Migdal's No Explosion Theorem to deterministic ICs"
+  }
+}

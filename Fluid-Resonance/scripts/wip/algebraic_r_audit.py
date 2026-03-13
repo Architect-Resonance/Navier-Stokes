@@ -1,63 +1,49 @@
-import sympy as sp
+import numpy as np
 
 def compute_algebraic_r():
     print("--- Scientific Hat: Algebraic Precision Audit ---")
     
-    t = sp.symbols('t')
+    # Adjacency for K5 star-cluster (8 nodes total)
+    def c2e(clauses):
+        edges = set()
+        for c in clauses:
+            for i in range(len(c)):
+                for j in range(i+1, len(c)):
+                    edges.add((min(c[i],c[j]), max(c[i],c[j])))
+        return edges
+
+    # Topology: K5 core + 2 anchors + bridge
+    cluster_clauses = [(0,1,2),(1,2,3),(2,3,4),(3,4,0),(4,0,1),(5,0,3),(6,2,4),(7,5,6)]
+    edges8 = c2e(cluster_clauses)
+    A8 = np.zeros((8,8))
+    for i,j in edges8: A8[i][j] = 1; A8[j][i] = 1
+    L8 = np.diag(A8.sum(axis=1)) - A8
+
+    # Grounding (Hub = 0 constraint)
+    D_bridge = np.zeros(8)
+    D_bridge[0] = 2; D_bridge[1] = 2; D_bridge[2] = 1; D_bridge[4] = 1
+    L_eff = L8 + np.diag(D_bridge)
+    l8 = np.sort(np.linalg.eigvalsh(L_eff))[0]
+
+    # Reduced topology (6 nodes)
+    keep = [0, 1, 3, 5, 6, 7]
+    A_red = A8[np.ix_(keep, keep)]
+    D_bridge_red = D_bridge[keep]
+    L_eff_red = np.diag(A_red.sum(axis=1)) - A_red + np.diag(D_bridge_red)
+    l6 = np.sort(np.linalg.eigvalsh(L_eff_red))[0]
+
+    R = l8 / l6
     
-    # Characteristic Polynomials (from RESONANCE_STATE.json P7 and P5 approximations)
-    # P5 core: K5 with 2 anchors (simplified to its characteristic polynomial)
-    # The eigenvalues are the roots. we want the ratio of the smallest non-zero evals.
+    print(f"lambda_min(8x8): {l8:.16f}")
+    print(f"lambda_min(6x6): {l6:.16f}")
+    print(f"Invariant R: {R:.16f}")
     
-    # The actual polynomials derived for the K_n + 2 anchors are:
-    # Pn = (t-1)(t - (n+2+sqrt(...) ) / 2) (t - (n+2-sqrt(...) ) / 2) ...
-    # From S79 audit: lambda_min_n = ( (n+2) - sqrt(n^2 + 4n - 28) ) / 2
+    # Reference value from CLAUDE_BRIDGE.md
+    REF_R = 1.8573068741389058
+    print(f"Reference R: {REF_R:.16f}")
+    print(f"Consistency Check: {abs(R - REF_R) < 1e-12}")
     
-    def get_lambda_min(n):
-        disc = n**2 + 4*n - 28
-        return ( (n + 2) - sp.sqrt(disc) ) / 2
-    
-    l7 = get_lambda_min(7)
-    l5 = get_lambda_min(5)
-    
-    R = l7 / l5
-    
-    print(f"n=7 Lambda_min: {l7}")
-    print(f"n=5 Lambda_min: {l5}")
-    print(f"Exact R: {R}")
-    print(f"Numerical (50 digits): {R.evalf(50)}")
-    
-    # Is R algebraic? 
-    # R = (9 - sqrt(49)) / 2 / ( (7 - sqrt(17)) / 2 )
-    # R = (9-7)/2 / ( (7-sqrt(17))/2 )
-    # R = 1 / ( (7-sqrt(17))/2 ) = 2 / (7-sqrt(17))
-    
-    # Rationalize R:
-    R_rat = 2 * (7 + sp.sqrt(17)) / (49 - 17)
-    R_rat = 2 * (7 + sp.sqrt(17)) / 32
-    R_rat = (7 + sp.sqrt(17)) / 16
-    
-    print(f"Rationalized R: {R_rat}")
-    print(f"Simplified Numerical: {R_rat.evalf(50)}")
-    
-    # Minimal Polynomial of R
-    # x = (7 + sqrt(17)) / 16
-    # 16x - 7 = sqrt(17)
-    # (16x - 7)^2 = 17
-    # 256x^2 - 224x + 49 = 17
-    # 256x^2 - 224x + 32 = 0
-    # 8x^2 - 7x + 1 = 0 (Dividing by 32)
-    
-    min_poly = 8*t**2 - 7*t + 1
-    print(f"Minimal Polynomial of R: {min_poly}")
-    
-    # Compare with 1.857 hypothesis
-    # (7 + sqrt(17))/16 approx (7 + 4.123)/16 = 11.123/16 = 0.695
-    # Wait, the 1.857 invariant was R = lambda_8 / lambda_6? 
-    # Or R = lambda_7 / lambda_5?
-    # Let's check the coordination docs
-    
-    return R_rat
+    return R
 
 if __name__ == "__main__":
     compute_algebraic_r()
