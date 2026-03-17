@@ -122,3 +122,57 @@ print(f"R = {R:.16f}")  # Expected: 1.8573068741389058
 ```
 
 If this matches, the algebraic core is verified.
+
+## 7. Automated Paper Audit (S107)
+
+An automated audit pipeline verifies all mathematical claims in `the_shape.tex`.
+
+### Quick run (Section 5 only)
+
+```bash
+cd Fluid-Resonance/scripts/audit
+python audit_pipeline.py ../../the_shape.tex --section 5 --output audit_report.md --json
+```
+
+### Full paper audit
+
+```bash
+python audit_pipeline.py ../../the_shape.tex --output audit_report.md --json
+```
+
+Or from any Claude Code session: `/audit-paper`
+
+### What it checks
+
+| Claim | Verifier | Method |
+|-------|----------|--------|
+| Helical inner product (lem:inner) | `verify_inner_product` | 20 angles × 4 helicity sectors |
+| Leray suppression (lem:leray) | `verify_leray_suppression` | 50 angles, identity check |
+| Fano Laplacian (prop:fano-lap) | `verify_fano_laplacian` | Exact NumPy eigenvalues of 7×7 matrix |
+| Von Mises (prop:vonmises) | `verify_von_mises_phase` | Numerical at κ=0.5..50, crossover search |
+| Assembly time (prop:assembly) | `verify_assembly_time` | Direct formula + 200-term partial sum |
+
+### Adding new verifiers
+
+Edit `Fluid-Resonance/scripts/audit/claim_verifier.py`:
+
+1. Write a function `verify_X(claim) -> VerificationResult`
+2. Add to `VERIFIER_REGISTRY` (by label) or `TITLE_REGISTRY` (by title)
+3. Re-run the pipeline
+
+### Architecture
+
+```
+Fluid-Resonance/scripts/audit/
+├── tex_parser.py          # TexSoup-based claim extraction
+├── claim_verifier.py      # Verification functions + registry
+├── domain_rules.py        # Kolmogorov scaling, Bessel asymptotics, tolerances
+├── report_generator.py    # Markdown + JSON output
+└── audit_pipeline.py      # CLI orchestrator
+```
+
+### MCP servers (available next session)
+
+- **sympy-mcp**: Symbolic manipulation (existing)
+- **jupyter-mcp-server**: Numerical evaluation with scipy/mpmath/numpy (new)
+- **arxiv-latex-mcp**: Pull arXiv papers' raw LaTeX (new)
