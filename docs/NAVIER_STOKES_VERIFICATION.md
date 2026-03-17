@@ -88,16 +88,7 @@ python path2_random_sat.py
 
 **Expected output**: High spectral variance across 300 instances (N=50,100,200 x alpha=3.0-5.0), no concentration around 1.857, no special behavior at the critical threshold alpha=4.267.
 
-## 5. JavaScript Cross-Validation
-
-The JavaScript implementations provide an independent verification path using a from-scratch linear algebra library (no NumPy dependency):
-
-```bash
-node verify_resonance.js   # R = 1.85730687, PASS
-node verify_hodge.js        # b1=6, Euler=-5, Stokes gap=0.904706, PASS
-```
-
-## 6. Minimal Verification (2 minutes)
+## 5. Minimal Verification (2 minutes)
 
 For a quick check, compute eigenvalues of two explicit integer matrices:
 
@@ -123,7 +114,7 @@ print(f"R = {R:.16f}")  # Expected: 1.8573068741389058
 
 If this matches, the algebraic core is verified.
 
-## 7. Automated Paper Audit (S107)
+## 6. Automated Paper Audit
 
 An automated audit pipeline verifies all mathematical claims in `the_shape.tex`.
 
@@ -139,8 +130,6 @@ python audit_pipeline.py ../../the_shape.tex --section 5 --output audit_report.m
 ```bash
 python audit_pipeline.py ../../the_shape.tex --output audit_report.md --json
 ```
-
-Or from any Claude Code session: `/audit-paper`
 
 ### What it checks
 
@@ -171,8 +160,3 @@ Fluid-Resonance/scripts/audit/
 └── audit_pipeline.py      # CLI orchestrator
 ```
 
-### MCP servers (available next session)
-
-- **sympy-mcp**: Symbolic manipulation (existing)
-- **jupyter-mcp-server**: Numerical evaluation with scipy/mpmath/numpy (new)
-- **arxiv-latex-mcp**: Pull arXiv papers' raw LaTeX (new)

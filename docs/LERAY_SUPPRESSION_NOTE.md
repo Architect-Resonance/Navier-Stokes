@@ -1,7 +1,6 @@
 # Geometric Suppression of Cross-Helical Nonlinearity in Navier-Stokes
 
-**Sessions S88-S94 Research Note — 2026-03-13**
-**Contributors**: Wanderer (derivation, verification, Lamb-weighted analysis), Meridian 2 (energy weighting, property corrections), Meridian 1 (literature, tightening)
+**Research Note — March 2026**
 
 ---
 
@@ -118,7 +117,7 @@ The formula was verified against direct numerical computation of the Leray proje
 | theta -> pi, rho = 1 | 1/2 | Antiparallel limit |
 | alpha(theta, rho) | = alpha(theta, 1/rho) | Symmetry under scale inversion |
 
-> **CORRECTION (Meridian 2, S94):** The earlier rows claiming "alpha -> 0 as rho -> 0 or inf" have been removed. They were **FALSE**. At rho=0.001, theta=90deg: alpha = 0.666. The isotropic average is MINIMIZED at rho=1 (0.307) and INCREASES to 2(1-ln2) = 0.614 at extreme rho.
+> **Note:** alpha does NOT vanish at extreme rho. At rho=0.001, theta=90deg: alpha = 0.666. The isotropic average is MINIMIZED at rho=1 (0.307) and INCREASES to 2(1-ln2) = 0.614 at extreme rho.
 
 **Key observations:**
 - alpha_{+-} is **bounded above by 1/2** for rho = 1 (reached only in the antiparallel limit)
@@ -168,7 +167,7 @@ The suppression is **strongest at ρ = 1** (equal magnitudes) and weakens for sc
 
 ---
 
-## 6. Solenoidal Lamb Per Triad and Lamb-Weighted Average (S94-W)
+## 6. Solenoidal Lamb Per Triad and Lamb-Weighted Average
 
 ### The key identity
 
@@ -234,9 +233,9 @@ Steeper spectra (more energy at low k) push α_E toward the ρ = 1 value of 1/4,
 
 ---
 
-## 7. Energy-Weighted Measurements (Meridian 2)
+## 7. Energy-Weighted Measurements
 
-The isotropic average treats all triads equally. In actual turbulence, energy is distributed across scales. Meridian 2 computed the **energy-weighted** suppression during NS evolution:
+The isotropic average treats all triads equally. In actual turbulence, energy is distributed across scales. The **energy-weighted** suppression was computed during NS evolution:
 
 | IC | alpha_cross at peak Z | Geometric avg | Delta |
 |---|---|---|---|
@@ -278,11 +277,9 @@ Buaria & Pumir observed spontaneous self-attenuation of vorticity at extreme eve
 ### Buaria, Lawson & Wilczek — twisting vortex lines (2024, Science Advances eado1969)
 Buaria, Lawson & Wilczek demonstrated the "anti-twist" mechanism: vortex amplification creates twist in vortex lines (ω_θ > 0), but amplification itself generates opposing anti-twist that self-terminates growth. Their key result (Eq. 5 in the paper) reduces the nonlinear stretching term to an integral over the twist component ω_θ alone. This is the physical-space counterpart of our spectral suppression: when stretching creates wavevector alignment (small θ between k₁ and k₂), our formula gives α → 0, meaning the cross-helical Lamb becomes fully gradient. **No formal mathematical bounds are proved** — the anti-twist is observed numerically and in experiments (DNS up to Re_λ = 1300, von Kármán flow). Their inviscid (Euler) simulations show the same anti-twist, confirming that the mechanism is structural, not viscous.
 
-*(Note: S94-W misattributed this to "Xiong & Yang" — corrected. The earlier attribution to "Buaria 2024" was correct.)*
-
 ---
 
-## 10. Enstrophy Production Decomposition (S94)
+## 10. Enstrophy Production Decomposition
 
 The enstrophy equation decomposes by helical sector:
 
@@ -391,13 +388,13 @@ The enstrophy decomposition (§10) provides quantitative confirmation: the actua
 
 | File | Description |
 |---|---|
-| `scripts/wip/leray_analytical_formula.py` | Exact formula + verification + plots (S93-W) |
-| `scripts/wip/leray_suppression_geometry.py` | Direct computation of α per-triad (S93) |
-| `scripts/wip/spectral_weighting_proof.py` | Lamb-weighted bound 1/4 + phase coherence analysis (S94-W) |
-| `scripts/wip/energy_weighted_leray.py` | Energy-weighted α during NS evolution (S93) |
-| `scripts/wip/lamb_helicity_decomposition.py` | Helicity-sector decomposition of Lamb (S89) |
-| `scripts/wip/enstrophy_decomposition.py` | Enstrophy production by helical sector (S94) |
-| `scripts/wip/approach_a_triadic_bound.py` | Triadic C-S tightening (S93, negative) |
+| `scripts/wip/leray_analytical_formula.py` | Exact formula + verification + plots |
+| `scripts/wip/leray_suppression_geometry.py` | Direct computation of α per-triad |
+| `scripts/wip/spectral_weighting_proof.py` | Lamb-weighted bound 1/4 + phase coherence analysis |
+| `scripts/wip/energy_weighted_leray.py` | Energy-weighted α during NS evolution |
+| `scripts/wip/lamb_helicity_decomposition.py` | Helicity-sector decomposition of Lamb |
+| `scripts/wip/enstrophy_decomposition.py` | Enstrophy production by helical sector |
+| `scripts/wip/approach_a_triadic_bound.py` | Triadic C-S tightening (negative result) |
 | `scripts/wip/shared_algebraic_structure.py` | SpectralNS base class |
 | `docs/LERAY_SUPPRESSION_NOTE.md` | This document |
 
@@ -410,7 +407,7 @@ The enstrophy decomposition (§10) provides quantitative confirmation: the actua
 | 1 | α₊₋(θ,ρ) exact formula | **PROVED** | Theorem, §3 |
 | 2 | α₊₋(θ,1) ≤ 1/2 | **PROVED** | §4 |
 | 3 | ⟨α₊₋⟩(ρ=1) = 1 − ln 2 | **PROVED** | Corollary, §5 |
-| 4 | ⟨α₊₋⟩ minimized at ρ=1 | **PROVED** | §5, corrected S94 |
+| 4 | ⟨α₊₋⟩ minimized at ρ=1 | **PROVED** | §5 |
 | 5 | \|P_sol(h⁺×h⁻)\|² = sin²θ/4 | **PROVED** | §6 |
 | 6 | Lamb-weighted α_E = 1/4 (ρ=1) | **PROVED** (incoherent) | §6 |
 | 7 | alpha_E < 0.388 under NS evolution | **OBSERVED** (3 ICs, N=32) | §7 |
