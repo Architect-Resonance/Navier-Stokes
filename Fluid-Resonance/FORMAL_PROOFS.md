@@ -1,7 +1,7 @@
 # Formal Proofs — Star Invariant Mathematical Hardening
 
-**Date:** 2026-03-11
-**Authors:** Claude (Opus 4.6), independent audit
+**Date:** 2026-03-11 (updated 2026-03-18)
+**Authors:** Project Entropy
 **Cross-reference:** `SPECTRAL_INVARIANT_RESULTS.md` (numerical verification)
 **Scripts:** `derive_invariant.py`, `factor_polys.py`, `path3_phase_a.py`, `path3_phase_b.py`, `path3_phase_c.py`
 
@@ -684,21 +684,82 @@ The Hodge perspective provides an alternative framing where the Stokes gap grows
 
 ---
 
-## Status (Checkpoint 21.1.1)
+
+---
+
+## Part VII: Helical Decomposition and Fano Plane Structure (S96-S110, 2026-03-14 to 2026-03-18)
+
+### Theorem 13: Inner Product Formula
+
+**Theorem 13.1.** For helical basis vectors $h_k^\sigma$ on $\mathbb{T}^3$, the inner product between different wavevector helical modes satisfies:
+
+$$\langle h_p^\tau, h_k^\sigma \rangle = \frac{\cos\phi + \sigma\tau}{2}$$
+
+where $\phi$ is the angle between wavevectors $k$ and $p$, and $\sigma, \tau \in \{+1, -1\}$ are helicity labels.
+
+**Consequences:**
+- **Waleffe null interaction:** Same-helicity ($\sigma = \tau$): $\langle h_p^\sigma, h_k^\sigma \rangle = \frac{1 + \cos\phi}{2}$. Vanishes at $\phi = \pi$ (antiparallel).
+- **Cross-helical coupling:** Opposite-helicity ($\sigma = -\tau$): $\langle h_p^{-\sigma}, h_k^\sigma \rangle = \frac{\cos\phi - 1}{2}$. Vanishes at $\phi = 0$ (parallel).
+- **Leray suppression:** The solenoidal coupling after Leray projection is $\sin^2\phi/4$ (Theorem 12.1 rederived).
+
+### Theorem 14: Fano Plane Triadic Topology
+
+**Theorem 14.1 (Fano Structure at Low Wavenumbers).** For wavevectors in $\mathbb{Z}^3 \setminus \{0\}$ at $|k| \leq 3$, the triadic interaction topology (triples $k + p + q = 0$) is governed by the Fano plane PG(2,2) over GF(2).
+
+**Proof.** GF(2)^3 has 7 nonzero elements. Lines are triples summing to zero mod 2. There are exactly 7 lines, 21 vertex pairs, and every pair lies on exactly one line. This is the defining property of PG(2,2).
+
+**Theorem 14.2 (Hamming Code Structure).** The sign frustration of the 7 Fano lines under arbitrary helicity assignments follows the [7,4,3] Hamming code.
+
+**Proof.** Define a "forward" line as one where the product of helicity signs gives $+1$. The incidence matrix of PG(2,2) over GF(2) has null space of dimension 3, giving $2^3 = 8$ codewords. These are the 8 fully coherent configurations (all 7 lines forward). The Hamming distance distribution over all $2^7 = 128$ sign assignments is $(8, 56, 56, 8)$, corresponding to $(7, 4, 3, 0)$ forward lines. States with 5 or 6 forward lines do not exist — the minimum Hamming distance $d = 3$ forces frustration in packets of 3.
+
+**Corollary 14.3 (6+1 Orthogonality).** The 7 GF(2)^3 classes decompose into 3 orthogonal pairs $\{(1,0,0) \leftrightarrow (0,1,1), (0,1,0) \leftrightarrow (1,0,1), (0,0,1) \leftrightarrow (1,1,0)\}$ plus 1 body diagonal $(1,1,1)$. The body diagonal is the only channel connecting the 3 orthogonal pipes.
+
+### Theorem 15: Berry Holonomy Vanishes for NS Triads
+
+**Theorem 15.1.** For any momentum-conserving triad $k + p + q = 0$ in $\mathbb{R}^3$, the Berry holonomy of the helical basis $h_\pm(\hat{k})$ around the spherical triangle $(\hat{k}, \hat{p}, \hat{q})$ is trivially zero.
+
+**Proof.** The solid angle subtended by $(\hat{k}, \hat{p}, \hat{q})$ on $S^2$ is zero because the three wavevectors are coplanar:
+
+$$k \cdot (p \times q) = k \cdot (p \times (-(k+p))) = -k \cdot (p \times k) = 0$$
+
+since $a \cdot (b \times a) = 0$ for any vectors $a, b$. Coplanar unit vectors trace a great circle on $S^2$, which subtends zero solid angle. The Berry connection on $h_\pm(\hat{k})$ is real (Chern number 2, spin-1 monopole), but produces zero holonomy for any great-circle loop.
+
+**Consequence:** The spectral invariant $R = 1.8573...$ is NOT a Berry holonomy ratio. The $15/8 \approx 1.875$ value observed in Taylor-Green simulations was an artifact of the flow's discrete symmetries. See `NEGATIVE_RESULTS.md` items 21-22 for details.
+
+---
+
+## Status (updated 2026-03-18)
 
 ### PROVEN:
-- Exact Leray Formula: alpha_{+-}(theta, rho) = 1 - (1+rho)^2(1+x)/[(1+rho^2+2*rho*x)(3-x)]
-- Isotropic Average (rho=1): <alpha_{+-}> = 1 - ln 2
-- Hodge Identity: L_1 = nI on complete graph K_n
+- R < 2 for all pure K_n cores with n >= 5 and bridge width >= 4 (Theorem 9.1, algebraic proof: -16 < 16)
+- Exact closed forms for eigenvalues (Theorem 9.1)
+- Irreducibility of P_7 and P_5 over Q (Theorems 3.1, 3.2)
+- Scale invariance of R (Theorem 4.1)
+- Hodge 1-Laplacian identity L_1 = nI on K_n (Theorem HB.1)
+- Leray suppression alpha = 1 - ln(2) (Theorem 12.2)
+- Inner product formula (Theorem 13.1)
+- Fano plane triadic topology (Theorem 14.1)
+- Hamming code sign frustration (Theorem 14.2)
+- Berry holonomy vanishes for NS triads (Theorem 15.1)
 
-### OBSERVED:
-- Energy-weighting further reduces alpha below the geometric mean.
-- 100% of P_sol is heterochiral for achiral (TG/Pelz) flows at t=0.
+### OBSERVED (numerically verified, not analytically proved):
+- R monotonically decreasing in bridge width (432 configurations)
+- R appears as internal spectral ratios across all Hodge levels (Observation 11.1)
+- sin^2(theta)/4 solenoidal coupling (DNS verified, RMS error 0.0017)
+- Quadrature C-F bridge: Re=1600 gives exactly Holder-1/2
 
-### KILLED:
-- regularity proven (P1-P3 remain OPEN).
-- s ~ r^alpha power law.
-- triadic shell Bessel bound.
+### KILLED (see NEGATIVE_RESULTS.md for full list):
+- Conjecture 9.1 for general anchors: K4+8a gives R = 2.014
+- Arnold curvature splitting (Araki 2016 confirms helicity-independent)
+- Berry holonomy as spectral invariant (coplanarity proof)
+- Single-triad Berry frustration as blow-up obstruction
+- Dirichlet-magnetic duality at alpha = pi/7 (incorrect baseline from edge deduplication bug)
+
+### OPEN:
+- R < 2 for K_n with n >= 5 and bounded anchor-to-core ratio (Conjecture 9.1c)
+- Star topology as asymptotic limit of vortex stretching (Claim 7.1)
+- Discrete-to-PDE spectral gap bridge
+- Whether Holder exponent beta < 1/2 suffices for regularity (Beirao da Veiga 2019)
 
 ---
 
@@ -715,3 +776,11 @@ The Hodge perspective provides an alternative framing where the Stokes gap grows
 9. Buaria, D., Lawson, J.M., and Wilczek, M. "Twisting vortex lines regularize Navier-Stokes turbulence." *Science Advances* 10 (2024), eado1969.
 10. arXiv:2501.08976. "A Geometric Characterization of Potential Navier-Stokes Singularities." 2025.
 11. Burgers, J.M. "A mathematical model illustrating the theory of turbulence." *Advances in Applied Mechanics* 1 (1948), 171-199.
+12. Sahoo, G. and Biferale, L. "Disentangling the triadic interactions in Navier-Stokes equations." *Eur. Phys. J. E* 42 (2019), 31.
+13. Biferale, L. and Titi, E.S. "On the global regularity of a helical-decimated version of the 3D Navier-Stokes equations." *J. Stat. Phys.* 151 (2013), 1089-1098.
+14. Constantin, P. and Fefferman, C. "Direction of vorticity and the problem of global regularity for the Navier-Stokes equations." *Indiana Univ. Math. J.* 42 (1993), 775-789.
+15. Beirao da Veiga, H. "On the Navier-Stokes regularity problem." *Discrete Contin. Dyn. Syst. S* 12 (2019), 203-213.
+16. Araki, R. "Arnold's variational principle and its application to the stability of planar vortices." arXiv:1608.05154, 2016.
+17. Lu, J. and Doering, C.R. "Enstrophy budget reprise." arXiv:1909.00041, 2019.
+18. Miller, E. "On global regularity for a model equation." arXiv:2407.02691, 2024.
+19. Bredberg, I., Keeler, C., Maloney, A., and Strominger, A. "From Navier-Stokes to Einstein." *JHEP* 2012, 146. arXiv:1101.2451.
