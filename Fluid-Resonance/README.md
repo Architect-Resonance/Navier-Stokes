@@ -1,72 +1,50 @@
-# Fluid Resonance — Spectral Invariants of Star-Cluster Graphs
+# Fluid Resonance — Helical Structure and Enstrophy Constraints in 3D Navier-Stokes
 
-Computational tools and formal proofs for a family of exact algebraic invariants arising from grounded Laplacian matrices of clustered star graphs. The central result is a geometry-specific spectral constant **R = 1.85731** that governs the ratio of minimum eigenvalues under simplicial surgery (valve removal).
+Research into the geometric mechanisms constraining enstrophy growth in three-dimensional incompressible Navier-Stokes flow on the torus. Combines spectral graph theory, helical decomposition, and Fano plane topology to quantify how the Leray projection suppresses nonlinear interactions.
 
-## Scientific Status
+## Key Results
 
-| Claim | Status | Evidence |
-|-------|--------|----------|
-| R is an exact algebraic invariant of star-cluster graphs | **PROVEN** | Irreducible polynomials P7, P5 over Q (Theorems 3.1, 3.2) |
-| R is scale-invariant (N=2 to N=8192) | **PROVEN** | Path 1 generalization (Theorem 4.1) |
-| R is topology-dependent (star/chain/tree) | **PROVEN** | Fiedler's extremal result (Theorem 5.1) |
-| Valve removal has dual effect (weakens connectivity, strengthens dissipation) | **VERIFIED** | Discrete Hodge decomposition (Theorems 8.1-8.3) |
-| R < 2.0 for pure K_n cores (0 anchors, n >= 5, w >= 4) | **PROVEN** | Exact closed-form eigenvalues + algebraic inequality → -16 < 16 (Theorem 9.1) |
-| R < 2.0 for all star-cluster systems (arbitrary anchors) | **REFUTED** | K4 + 8 anchors at w=4: R = 2.014 (counterexample to original Conjecture 9.1) |
-| R is monotonically decreasing in bridge width | **VERIFIED** | 432/432 (core, anchor) pairs confirmed perfectly monotone |
-| Star topology is asymptotic limit of vortex stretching | **CONJECTURE** | Supported by CKN + Fiedler extremal result (Claim 7.1) |
-| R bounds enstrophy cascade, preventing NS blow-up | **CONJECTURE** | Would follow if Claim 7.1 proven + pure-core model justified |
+| Result | Status | Reference |
+|--------|--------|-----------|
+| Cross-helical Leray suppression: alpha = 1 - ln(2) | **PROVEN** | Theorem 12.2, `the_shape.tex` Section 3 |
+| Solenoidal coupling: sin^2(theta)/4 | **DNS VERIFIED** | RMS error 0.0017, 30,000 triads |
+| Fano plane PG(2,2) governs triadic topology at low k | **PROVEN** | Theorem 14.1 |
+| [7,4,3] Hamming code structure of sign frustration | **PROVEN** | Theorem 14.2 |
+| Berry holonomy vanishes for NS triads (k+p+q=0) | **PROVEN** | Theorem 15.1, coplanarity proof |
+| R < 2 for pure K_n cores (n >= 5, w >= 4) | **PROVEN** | Theorem 9.1, algebraic: -16 < 16 |
+| R < 2 for arbitrary anchors | **REFUTED** | K4 + 8 anchors: R = 2.014 |
+| Quadrature C-F bridge: Re=1600 gives Holder-1/2 | **OBSERVED** | `scripts/wip/constantin_fefferman_bridge.py` |
+| Holder-beta with beta < 1/2 suffices for regularity | **OPEN** | Beirao da Veiga 2019 |
+| 22 investigated approaches ruled out | **DOCUMENTED** | `NEGATIVE_RESULTS.md` |
 
-## The Constant
+## The Spectral Invariant
 
 ```
 R = lambda_min(L_8x8) / lambda_min(L_6x6) = 1.8573068741389058
 ```
 
-- **L_8x8**: 8×8 integer grounded spoke Laplacian of K5+2anchor cluster
-- **L_6x6**: 6×6 reduced grounded spoke Laplacian after valve removal
-- Defining polynomials: P7 (degree 7) and P5 (degree 5), both irreducible over Q
-- Best rational approximation: 13/7 (error < 0.009%)
+- **L_8x8**: Grounded spoke Laplacian of K5+2anchor star cluster
+- **L_6x6**: Reduced Laplacian after valve removal
+- Defining polynomials P7 (degree 7) and P5 (degree 5), both irreducible over Q
 
-## Repository Structure
+## The Leray Suppression
+
+For cross-helical Lamb vector interactions in the helical basis:
 
 ```
-├── spectral_invariants_flows.tex    # LaTeX manuscript
-├── Navier_Stokes_Submission.pdf     # Typeset paper
-├── FORMAL_PROOFS.md                 # 12 theorems, open conjectures, references
-├── COVER_LETTER_CLEAN.txt           # Submission cover letter
-│
-├── derive_invariant.py              # Derives R from first principles
-├── factor_polys.py                  # Proves P7, P5 irreducible over Q
-├── proof_R_less_than_2.py           # Theorem 9.1: algebraic proof R < 2
-├── conjecture91_sweep.py            # 4,128-config parametric sweep
-├── conjecture91_boundary.py         # Boundary analysis + closed-form eigenvalues
-│
-├── scripts/
-│   ├── supporting/                  # Extended verification scripts
-│   │   ├── path1_generalization.py  # 88-config scale/topology tests
-│   │   ├── path2_random_sat.py      # 3-SAT audit (negative result)
-│   │   ├── path3_phase_a.py         # Hodge decomposition
-│   │   ├── path3_phase_b.py         # Discrete NS flow analysis
-│   │   └── path3_phase_c.py         # Hodge spectrum cross-validation
-│   └── wip/                         # Work in progress (Problems 2 & 3)
-│       ├── problem2_vortex_formalization.py
-│       └── problem3_continuum_limit.py
-│
-└── docs/                            # Supporting documentation
-    ├── INCOMPRESSIBLE_STILLNESS_PAPER.md
-    ├── NAVIER_STOKES_VERIFICATION.md
-    ├── SPECTRAL_INVARIANT_RESULTS.md
-    ├── SIGNAL_6_SUMMARY.md
-    ├── SCALING_INVARIANCE_REPORT.txt
-    └── RESONANCE_STATE.json
+Per-triad:  alpha(theta, rho) = 1 - (1+rho)^2(1+cos theta) / [(1+rho^2+2*rho*cos theta)(3-cos theta)]
+Same-shell: alpha(theta, rho=1) = (1-cos theta) / (3-cos theta)
+Isotropic:  <alpha> = 1 - ln(2) = 0.30685...
 ```
+
+69.3% of the cross-helical Lamb vector is irrotational and removed by the pressure term.
 
 ## Quick Verification
 
-Independent verification requires only eigenvalue computation on two explicit integer matrices:
-
 ```python
 import numpy as np
+
+# Spectral invariant R
 L8 = np.array([[ 7,-1,-1,-1,-1,-1, 0, 0],
                [-1, 6,-1,-1,-1, 0, 0, 0],
                [-1,-1, 6,-1,-1, 0,-1, 0],
@@ -83,16 +61,62 @@ L6 = np.array([[ 5,-1,-1,-1, 0, 0],
                [ 0, 0, 0,-1,-1, 2]])
 R = min(np.linalg.eigvalsh(L8)) / min(np.linalg.eigvalsh(L6))
 print(f"R = {R:.16f}")  # 1.8573068741389058
+
+# Leray suppression isotropic average
+from scipy.integrate import quad
+alpha_iso = quad(lambda x: (1-x)/(3-x), -1, 1)[0] / 2
+print(f"<alpha> = {alpha_iso:.10f}")  # 0.3068528194 = 1 - ln(2)
 ```
+
+## Repository Structure
+
+```
+├── the_shape.tex                    # Paper: helical decomposition + Leray suppression
+├── FORMAL_PROOFS.md                 # 15 theorems, gap analysis, references
+├── NEGATIVE_RESULTS.md              # 22 confirmed dead ends with refutations
+├── SPECTRAL_INVARIANT_RESULTS.md    # Numerical verification archive
+│
+├── scripts/
+│   ├── audit/                       # Automated claim verification pipeline
+│   │   ├── tex_parser.py            # Extract claims from .tex
+│   │   ├── claim_verifier.py        # Verify against domain rules
+│   │   ├── domain_rules.py          # Mathematical consistency rules
+│   │   └── report_generator.py      # Audit report output
+│   ├── supporting/                  # Scale/topology/Hodge verification
+│   └── wip/                         # ~100 computational scripts
+│       ├── leray_analytical_formula.py
+│       ├── verify_alpha_iso_derivation.py
+│       ├── berry_frustration_g1.py
+│       ├── check_fano_frustration.py
+│       ├── constantin_fefferman_bridge.py
+│       ├── mueller_q_prediction.py
+│       └── ...
+│
+├── derive_invariant.py              # Derives R from first principles
+├── factor_polys.py                  # Proves P7, P5 irreducible over Q
+└── proof_R_less_than_2.py           # Algebraic proof: R < 2
+```
+
+## Key References
+
+1. Biferale & Titi 2013 — Same-helicity global regularity (*J. Stat. Phys.* 151)
+2. Sahoo & Biferale 2017 — Cross-helical triads drive the forward cascade (*Eur. Phys. J. E* 42)
+3. Constantin & Fefferman 1993 — Vorticity direction Holder-1/2 implies regularity (*Indiana Math J.* 42)
+4. Miller 2024 — Model equation globally regular (arXiv:2407.02691)
+5. Lu & Doering 2019 — Enstrophy exponent 3/2 is sharp (arXiv:1909.00041)
+6. Buaria et al. 2024 — Anti-twist regularization (*Science Advances* 10)
+7. Bredberg, Keeler, Maloney & Strominger 2012 — NS from Einstein (arXiv:1101.2451)
+8. Beirao da Veiga 2019 — Holder-beta < 1/2 open problem (*DCDS-S* 12)
+9. Araki 2016 — Arnold sectional curvature for CHW modes (arXiv:1608.05154)
 
 ## Requirements
 
-Python scripts require `numpy` and `sympy`. No other dependencies.
+Python 3.8+, `numpy`, `scipy`, `sympy`. No other dependencies.
 
 ## Authors
 
-- **Brendan Siche** — Research design, submission
-- Technical assistance from generative AI tools (Claude, Gemini) for numerical verification, adversarial auditing, and typesetting. See manuscript disclosure section for details.
+- **Brendan Siche** — Research direction, experimental design
+- Technical assistance from generative AI (Claude, Gemini) for computation, verification, and adversarial auditing
 
 ## License
 
