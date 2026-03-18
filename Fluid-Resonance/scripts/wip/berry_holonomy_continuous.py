@@ -17,6 +17,7 @@ import time
 
 def leray_project(u_hat, KX, KY, KZ):
     """Project velocity field to be divergence-free."""
+    N = u_hat.shape[1]
     K2 = KX**2 + KY**2 + KZ**2
     K2_safe = K2.copy()
     K2_safe[0, 0, 0] = 1
@@ -24,6 +25,14 @@ def leray_project(u_hat, KX, KY, KZ):
     u_hat[0] -= KX * k_dot_u / K2_safe
     u_hat[1] -= KY * k_dot_u / K2_safe
     u_hat[2] -= KZ * k_dot_u / K2_safe
+    
+    # Preserve conjugate symmetry by truncating Nyquist frequencies
+    if N % 2 == 0:
+        mid = N // 2
+        u_hat[:, mid, :, :] = 0
+        u_hat[:, :, mid, :] = 0
+        u_hat[:, :, :, mid] = 0
+        
     u_hat[:, 0, 0, 0] = 0
     return u_hat
 
@@ -41,14 +50,14 @@ def random_ic(N, seed=42, k_max_ic=5):
     # Project to divergence-free in Fourier space and filter to low k
     # Use physical wavenumbers for Leray projection
     kx = np.fft.fftfreq(N, d=1.0/(2*np.pi*N)).astype(np.float64)
-    KZ, KY, KX = np.meshgrid(kx, kx, kx, indexing='ij')
+    KX, KY, KZ = np.meshgrid(kx, kx, kx, indexing='ij')
 
     u_hat = np.array([fftn(u[i]) for i in range(3)])
     u_hat = leray_project(u_hat, KX, KY, KZ)
 
     # Use INTEGER wavenumbers for filtering (k_max_ic is in integer units)
     kx_int = np.fft.fftfreq(N, d=1.0/N).astype(np.float64)
-    KZi, KYi, KXi = np.meshgrid(kx_int, kx_int, kx_int, indexing='ij')
+    KXi, KYi, KZi = np.meshgrid(kx_int, kx_int, kx_int, indexing='ij')
     K2_int = KXi**2 + KYi**2 + KZi**2
     mask_kill = K2_int > k_max_ic**2
     u_hat[:, mask_kill] = 0
@@ -65,7 +74,7 @@ def random_ic(N, seed=42, k_max_ic=5):
 def abc_flow(N, A=1.0, B=0.8, C=0.6):
     """Arnold-Beltrami-Childress flow — eigenfunction of curl, fully 3D."""
     x = np.linspace(0, 2*np.pi, N, endpoint=False)
-    Y, X, Z = np.meshgrid(x, x, x, indexing='ij')
+    X, Y, Z = np.meshgrid(x, x, x, indexing='ij')
     u = np.zeros((3, N, N, N))
     u[0] = A * np.sin(Z) + C * np.cos(Y)
     u[1] = B * np.sin(X) + A * np.cos(Z)
@@ -76,7 +85,7 @@ def abc_flow(N, A=1.0, B=0.8, C=0.6):
 def taylor_green_ic(N, A=1.0):
     """Taylor-Green vortex (for comparison)."""
     x = np.linspace(0, 2*np.pi, N, endpoint=False)
-    Y, X, Z = np.meshgrid(x, x, x, indexing='ij')
+    X, Y, Z = np.meshgrid(x, x, x, indexing='ij')
     u = np.zeros((3, N, N, N))
     u[0] = A * np.sin(X) * np.cos(Y) * np.cos(Z)
     u[1] = -A * np.cos(X) * np.sin(Y) * np.cos(Z)
@@ -87,7 +96,7 @@ def taylor_green_ic(N, A=1.0):
 def evolve_ns(u, nu, dt, t_target, N, snap_times=[1.0, 2.0, 3.0], print_interval=500):
     """Evolve NS with RK4, dealiased. Return snapshots."""
     kx = np.fft.fftfreq(N, d=1.0/(2*np.pi*N)).astype(np.float64)
-    KZ, KY, KX = np.meshgrid(kx, kx, kx, indexing='ij')
+    KX, KY, KZ = np.meshgrid(kx, kx, kx, indexing='ij')
     K2 = KX**2 + KY**2 + KZ**2
     K2_safe = K2.copy()
     K2_safe[0, 0, 0] = 1

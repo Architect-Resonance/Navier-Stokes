@@ -94,13 +94,35 @@ class SpectralNS:
         self.h_minus = (e1 - 1j * e2) / np.sqrt(2.0)
         self.h_plus[:, 0, 0, 0] = 0.0
         self.h_minus[:, 0, 0, 0] = 0.0
+        # Zero Nyquist modes — same sign issue as Leray projector
+        nyq = self.N // 2
+        nyq_mask = ((self.kx == nyq) | (self.kx == -nyq) |
+                    (self.ky == nyq) | (self.ky == -nyq) |
+                    (self.kz == nyq) | (self.kz == -nyq))
+        self.h_plus[:, nyq_mask] = 0.0
+        self.h_minus[:, nyq_mask] = 0.0
 
     def project_leray(self, f_hat):
-        """Leray projection: remove longitudinal component."""
-        result = np.zeros_like(f_hat)
+        """Leray projection: remove longitudinal component.
+
+        Zeroes Nyquist modes first: the projector P_ij = δ_ij - k_i·k_j/|k|²
+        breaks conjugate symmetry at Nyquist because -(-N/2) mod N = N/2, so
+        the off-diagonal P_ij(k) ≠ P_ij(-k) when k has a Nyquist component.
+        Nyquist modes carry negligible energy and are outside the 2/3 dealiasing
+        mask, so zeroing them is both safe and correct.
+        """
+        # Zero Nyquist modes to preserve conjugate symmetry
+        nyq = self.N // 2
+        nyq_mask = ((np.abs(self.kx) == nyq) |
+                    (np.abs(self.ky) == nyq) |
+                    (np.abs(self.kz) == nyq))
+        f_clean = f_hat.copy()
+        f_clean[:, nyq_mask] = 0.0
+
+        result = np.zeros_like(f_clean)
         for i in range(3):
             for j in range(3):
-                result[i] += self.P[(i, j)] * f_hat[j]
+                result[i] += self.P[(i, j)] * f_clean[j]
         return result
 
     def helical_decompose(self, f_hat):
@@ -285,10 +307,62 @@ class SpectralNS:
         # Reconstruct
         u_hat = self.helical_reconstruct(u_p_scaled, u_m)
 
+        # Enforce reality: helical rescaling breaks conjugate symmetry,
+        # so ifftn(u_hat) has nonzero imaginary part. Round-trip through
+        # physical space to get a real, divergence-free field.
+        u = np.array([np.real(ifftn(u_hat[i])) for i in range(3)])
+        u_hat = self.project_leray(np.array([fftn(u[i]) for i in range(3)]))
+
         # Normalize total energy
         u = np.array([np.real(ifftn(u_hat[i])) for i in range(3)])
         E = 0.5 * np.mean(np.sum(u**2, axis=0))
         u_hat *= np.sqrt(0.5 / max(E, 1e-15))
+        return u_hat
+
+    def narrowband_imbalanced_ic(self, seed=42, h_plus_frac=0.8, k_max_ic=2):
+        """IC with helical imbalance but energy only at low k (like TG).
+
+        This avoids the ||-dS|| inflation from broadband high-k content,
+        allowing fair comparison with TG in the Miller Q ratio.
+        Energy is placed at integer wavenumber shells |k| <= k_max_ic.
+        """
+        np.random.seed(seed)
+        N = self.N
+        u_hat = np.zeros((3, N, N, N), dtype=complex)
+
+        # Only excite modes with |k| <= k_max_ic
+        k_int = np.sqrt(self.kx**2 + self.ky**2 + self.kz**2)
+        low_k_mask = (k_int > 0.5) & (k_int <= k_max_ic + 0.5)
+
+        for i in range(3):
+            raw = fftn(np.random.randn(N, N, N))
+            u_hat[i] = raw * low_k_mask
+
+        u_hat = self.project_leray(u_hat)
+
+        # Decompose into h+ and h-
+        u_p, u_m = self.helical_decompose(u_hat)
+
+        # Scale to get desired imbalance
+        E_p = np.sum(np.abs(u_p)**2)
+        E_m = np.sum(np.abs(u_m)**2)
+        if E_p < 1e-30 or E_m < 1e-30:
+            # Fallback if one sector is empty
+            return u_hat
+        scale_p = np.sqrt(h_plus_frac * E_m / ((1 - h_plus_frac) * E_p))
+        u_p_scaled = u_p * scale_p
+
+        # Reconstruct
+        u_hat = self.helical_reconstruct(u_p_scaled, u_m)
+
+        # Enforce reality via physical-space round-trip
+        u = np.array([np.real(ifftn(u_hat[i])) for i in range(3)])
+        u_hat = self.project_leray(np.array([fftn(u[i]) for i in range(3)]))
+
+        # Normalize to same energy as TG (E=0.125)
+        u = np.array([np.real(ifftn(u_hat[i])) for i in range(3)])
+        E = 0.5 * np.mean(np.sum(u**2, axis=0))
+        u_hat *= np.sqrt(0.125 / max(E, 1e-15))
         return u_hat
 
     def helical_energy_fractions(self, u_hat):
