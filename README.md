@@ -11,7 +11,7 @@ The proof introduces a *phase decoherence* mechanism exploiting arithmetic struc
 - **[phase_decoherence_navier_stokes_2026_v1.3.pdf](paper/phase_decoherence_navier_stokes_2026_v1.3.pdf)** — full paper
 - **[CHANGELOG_v1.3.pdf](paper/CHANGELOG_v1.3.pdf)** — version history
 
-Published on [HAL](https://hal.science/) and [Zenodo](https://zenodo.org/) (DOI: 10.5281/zenodo.19256898).
+Published on [HAL](https://hal.science/) and [Zenodo]([https://zenodo.org/](https://zenodo.org/records/19337705)) (DOI: 10.5281/zenodo.19256898). 
 
 ## Key Results
 
